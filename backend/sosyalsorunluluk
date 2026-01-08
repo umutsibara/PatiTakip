@@ -1,0 +1,71 @@
+A. PROJEYE İLİŞKİN GENEL BİLGİLER
+A.1- Proje Adı:
+PatiTakip: Veri Destekli Kentsel Ekoloji Uygulaması
+A.2- Proje Ekibi:
+Öğrenci No Ad-Soyad
+222804007 Muhammed Umut ŞIBARA
+A.3- Projenin Yürütülmesinde İşbirliği Yapılacak Kurum veya Kuruluşlar:
+Proje, "Topluluk Katılımlı Veri Toplama" (Crowdsourcing) modeli üzerine kurgulanmıştır. Bu
+nedenle projenin geliştirme ve yaygınlaştırma sürecinde doğrudan tek bir resmi kurumla protokol
+yapmak yerine; yerel yönetimlerin ilgili birimleri, sivil toplum kuruluşları ve çevre duyarlılığı olan kent
+sakinleri projenin doğal paydaşları olarak hedeflenmiştir. Uygulama, Google Play Store üzerinden genel
+erişime açılarak geniş tabanlı bir toplumsal iş birliği sağlanacaktır.
+A.4- Etik Kurulu Kararına İhtiyaç Var mı? ¨ Evet* ¨ Hayır
+A.5- Proje Başlangıç ve Bitiş Tarihi* :
+Başlangıç: 20 Kasım 2025
+Bitiş: 22 Aralık 2025
+B. PROJE GEREKÇELERİ VE PLANI
+B.1- Proje Hakkında Genel Bilgi ve Araştırmanın Önemi:
+Günümüzde akıllı şehir (Smart City) konsepti, sadece enerji ve trafik yönetimini değil, kentsel
+ekosistemin tüm bileşenlerini kapsamaktadır. Bu ekosistemin önemli bir parçası olan sokak
+hayvanlarının popülasyon kontrolü, sağlık takibi ve beslenme yönetimi; veri eksikliği nedeniyle plansız
+yürütülmektedir. "PatiTakip", bu soruna teknolojik ve sürdürülebilir bir çözüm getirmeyi amaçlayan,
+veri destekli bir mobil yazılım projesidir.
+Literatürde "Topluluk Katılımlı Algılama" (Participatory Sensing) olarak bilinen yöntemle, son
+kullanıcıların akıllı telefonları aracılığıyla sisteme veri girmesi sağlanacaktır. Bu proje, sokak
+hayvanlarının konum, aşı, açlık vb. gibi durumlarını dijital bir harita üzerinde görselleştirerek "kentsel
+veri madenciliği" için bir altyapı sunmaktadır. Projenin önemi; yerel yönetimlerin ve hayvanseverlerin
+kısıtlı kaynaklarını (mama, ilaç) en ihtiyaç duyulan bölgelere yönlendirmesini sağlayacak veri analitiği
+tabanını oluşturmasıdır. Ayrıca uygulama, genel kullanıma (Play Store) açılarak toplumsal farkındalığı
+teknoloji ile birleştiren ölçeklenebilir bir model sunmaktadır.
+B.2- Araştırmanın Amacı ve Beklenen Yararlar:
+Bu projenin temel amacı; sokak hayvanlarının yaşam koşullarını iyileştirmek için gerçek
+zamanlı veri akışı sağlayan, kullanıcı dostu ve mobil marketlerde (Google Play Store) yayınlanabilir
+nitelikte bir mobil uygulama geliştirmektir. Proje, hayvanların mahalle bazlı yoğunluk haritalarını
+çıkararak, besleme ve sağlık müdahalelerinin sistematik hale getirilmesini hedefler.
+Beklenen Yararlar:
+1. Veriye Dayalı Karar Destek Sistemi: Hangi bölgedeki hayvanların aşıya veya mamaya ihtiyacı
+olduğu verilerle tespit edilerek kaynak israfı önlenecektir.
+2. Toplumsal Mobilizasyon: Mobil uygulama sayesinde toplumun her kesimi, akıllı telefonları
+üzerinden kentsel sorunların çözümüne aktif katkı sağlayabilecektir.
+3. Sürdürülebilir Şehir Yönetimi: Aşısız veya hasta hayvanların takibi kolaylaşacak, insan-
+hayvan çatışması minimize edilerek halk sağlığına katkı sunulacaktır.
+4. Teknolojik Yetkinlik ve Ürünleşme: Proje, modern yazılım mimarileri ve güvenlik standartları
+kullanılarak geliştirilecek olup; özgün ve profesyonel bir mobil ürün olarak dijital ekosisteme
+kazandırılacaktır.
+B.3- Proje Materyali ve Yöntemler
+B.3.1- Proje Materyali
+B.3.1- Yöntemler
+Projenin donanım altyapısında Android işletim sistemli mobil cihazlar kullanılacaktır. Yazılım
+mimarisi, modern ve ölçeklenebilir "İstemci-Sunucu" (Client-Server) yapısında kurgulanmıştır.
+· Mobil (İstemci): Android platformu üzerinde en yüksek yerel (native) performansı sağlayan
+Kotlin programlama dili kullanılacaktır.
+· Backend (Sunucu): Sunucu tarafında; yüksek eşzamanlılık (concurrency) yeteneği ve olay
+güdümlü (event-driven) mimarisi nedeniyle Node.js çalışma ortamı tercih edilmiştir.
+· Veritabanı: Veri bütünlüğünü ve karmaşık sorgu yapılarını destekleyen, açık kaynaklı İlişkisel
+Veritabanı Yönetim Sistemi (RDBMS) olan PostgreSQL kullanılacaktır.
+· Veri İletişimi: Sistemler arası haberleşme RESTful API mimarisi ile sağlanacak olup, veri
+taşıma formatı olarak Node.js ekosistemiyle doğal uyumlu olan JSON yapısı kullanılacaktır.
+B.3.2- Yöntemler:
+Proje geliştirme sürecinde modern Yazılım Geliştirme Yaşam Döngüsü (SDLC) izlenecektir:
+1. Veritabanı Tasarımı: PostgreSQL üzerinde Varlık-İlişki (E-R) diyagramları oluşturulacak ve
+veri tutarlılığı için normalizasyon işlemleri uygulanarak ilişkisel şema (Schema)
+tasarlanacaktır.
+2. API Geliştirme: Node.js üzerinde, mobil uygulamadan gelen istekleri asenkron olarak
+karşılayan ve veritabanı CRUD işlemlerini yöneten API uç noktaları (Endpoints)
+kodlanacaktır.
+3. Mobil Entegrasyon: Kotlin tarafında geliştirilen arayüzler, HTTP istemcileri (Retrofit vb.)
+aracılığıyla backend servisine bağlanarak verilerin kullanıcıya sunulması sağlanacaktır.
+4. Test ve Yayınlama: Uygulama, yerel ortamda (Localhost) birim testlerinden geçirildikten
+sonra, canlı sunucu ortamına taşınarak Google Play Store yayın standartlarına uygun hale
+getirilecektir.

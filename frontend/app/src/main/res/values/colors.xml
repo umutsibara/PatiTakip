@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand Colors -->
+    <color name="primary">#1976D2</color>        <!-- Deep Blue -->
+    <color name="primary_dark">#0D47A1</color>   <!-- Darker Blue -->
+    <color name="primary_light">#BBDEFB</color>  <!-- Light Blue -->
+    <color name="accent">#26A69A</color>         <!-- Teal -->
+    <color name="accent_dark">#00897B</color>    <!-- Darker Teal -->
+    <color name="accent_light">#E0F2F1</color>   <!-- Light Teal -->
+
+    <!-- Neutral Colors -->
+    <color name="background">#F8F9FA</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surface_variant">#F5F5F5</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_tertiary">#BDBDBD</color>
+    <color name="text_hint">#9E9E9E</color>
+    <color name="text_on_primary">#FFFFFF</color>
+
+    <!-- State Colors -->
+    <color name="success">#43A047</color>
+    <color name="error">#E53935</color>
+    <color name="warning">#FB8C00</color>
+    <color name="info">#1E88E5</color>
+
+    <!-- Category Colors -->
+    <color name="category_report">#E53935</color>    <!-- Red -->
+    <color name="category_feeding">#43A047</color>   <!-- Green -->
+    <color name="category_adoption">#1E88E5</color>  <!-- Blue -->
+    <color name="category_service">#FB8C00</color>   <!-- Orange -->
+
+    <!-- Component Colors -->
+    <color name="card_background">#FFFFFF</color>
+    <color name="divider">#EEEEEE</color>
+    <color name="ripple">#1F000000</color>
+    <color name="overlay_dark">#80000000</color>
+
+    <!-- Standard -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+</resources>
