@@ -210,11 +210,25 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
             
             val position = LatLng(lat, lng)
-            val markerIcon = when (report.category) {
-                "REPORT" -> bitmapDescriptorFromVector(R.drawable.ic_pin_report)
-                "FEEDING" -> bitmapDescriptorFromVector(R.drawable.ic_pin_feeding)
-                "ADOPTION" -> bitmapDescriptorFromVector(R.drawable.ic_pin_adoption)
-                else -> BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
+            
+            // Determine marker icon
+            val markerIcon = if (!report.animalType.isNullOrEmpty()) {
+                // If animal type is present, show specific emoji
+                val emoji = when (report.animalType.uppercase()) {
+                    "KEDİ", "CAT" -> "🐱"
+                    "KÖPEK", "DOG" -> "🐶"
+                    "KUŞ", "BIRD" -> "🐦"
+                    else -> "🐾"
+                }
+                createEmojiMarker(emoji)
+            } else {
+                // Fallback to category icons
+                when (report.category) {
+                    "REPORT" -> bitmapDescriptorFromVector(R.drawable.ic_pin_report)
+                    "FEEDING" -> bitmapDescriptorFromVector(R.drawable.ic_pin_feeding)
+                    "ADOPTION" -> bitmapDescriptorFromVector(R.drawable.ic_pin_adoption)
+                    else -> BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
+                }
             }
 
             val marker = googleMap?.addMarker(
@@ -226,6 +240,36 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             )
             marker?.tag = report
         }
+    }
+
+    private fun createEmojiMarker(emoji: String): BitmapDescriptor? {
+        val paint = android.graphics.Paint().apply {
+            textSize = 100f
+            textAlign = android.graphics.Paint.Align.CENTER
+            isAntiAlias = true
+        }
+        
+        // Calculate dimensions
+        val width = 140
+        val height = 140
+        
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        
+        // Draw background circle
+        val bgPaint = android.graphics.Paint().apply {
+            color = android.graphics.Color.WHITE
+            style = android.graphics.Paint.Style.FILL
+            isAntiAlias = true
+            setShadowLayer(10f, 0f, 5f, android.graphics.Color.GRAY)
+        }
+        canvas.drawCircle(width / 2f, height / 2f, (width / 2f) - 10, bgPaint)
+        
+        // Draw emoji centered
+        val yPos = (height / 2f) - ((paint.descent() + paint.ascent()) / 2f)
+        canvas.drawText(emoji, width / 2f, yPos, paint)
+
+        return BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 
     private fun bitmapDescriptorFromVector(vectorResId: Int): BitmapDescriptor? {

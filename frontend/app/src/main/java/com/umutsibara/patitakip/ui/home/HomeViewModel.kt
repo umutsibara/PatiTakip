@@ -72,5 +72,25 @@ class HomeViewModel(private val repository: ReportRepository) : BaseViewModel() 
             }
         }
     }
+
+    fun deleteReport(reportId: Int?) {
+        if (reportId == null) return
+        setLoading(true)
+        viewModelScope.launch {
+            try {
+                val response = repository.deleteReport(reportId)
+                if (response.isSuccessful) {
+                    // Refresh list after successful delete
+                    fetchReports()
+                } else {
+                    onError("Silme başarısız: ${response.code()}")
+                }
+            } catch (e: Exception) {
+                onError("Silme hatası: ${e.localizedMessage}")
+            } finally {
+                setLoading(false)
+            }
+        }
+    }
 }
 

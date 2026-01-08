@@ -64,6 +64,13 @@ class ProfileFragment : Fragment() {
             binding.tvUsername.text = user.username
             binding.tvEmail.text = user.email
             binding.tvScore.text = user.score?.toString() ?: "0"
+
+            // Admin kontrolü
+            if (user.role == "yonetici" || user.role == "admin") {
+                binding.btnAdminPanel.visibility = View.VISIBLE
+            } else {
+                binding.btnAdminPanel.visibility = View.GONE
+            }
         }
     }
 
@@ -72,6 +79,10 @@ class ProfileFragment : Fragment() {
             viewModel.logout()
             startActivity(Intent(requireContext(), LoginActivity::class.java))
             requireActivity().finish()
+        }
+
+        binding.btnAdminPanel.setOnClickListener {
+            startActivity(Intent(requireContext(), com.umutsibara.patitakip.ui.admin.AdminActivity::class.java))
         }
     }
 

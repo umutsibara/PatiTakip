@@ -22,6 +22,11 @@
 
     <style name="Theme.PatiTakip" parent="Base.Theme.PatiTakip" />
 
+    <style name="Theme.PatiTakip.NoActionBar" parent="Theme.PatiTakip">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <!-- Modern Card Style -->
     <style name="Widget.PatiTakip.Card" parent="Widget.Material3.CardView.Elevated">
         <item name="cardCornerRadius">16dp</item>

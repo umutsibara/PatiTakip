@@ -104,16 +104,27 @@
     </com.google.android.material.card.MaterialCardView>
 
     <Button
+        android:id="@+id/btnAdminPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="32dp"
+        android:text="Admin Paneli"
+        android:visibility="gone"
+        style="@style/Widget.Material3.Button"
+        app:layout_constraintTop_toBottomOf="@id/cvScore" />
+
+    <Button
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="16dp"
         android:text="Çıkış Yap"
         android:textColor="@color/error"
         style="@style/Widget.Material3.Button.OutlinedButton"
         app:strokeColor="@color/error"
-        app:layout_constraintTop_toBottomOf="@id/cvScore" />
+        app:layout_constraintTop_toBottomOf="@id/btnAdminPanel" />
 
     <ProgressBar
         android:id="@+id/progressBar"

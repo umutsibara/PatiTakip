@@ -24,6 +24,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Delete Button (Admin) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDeleteDetail"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="SİL"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/error"
+            app:icon="@drawable/ic_delete"
+            app:iconTint="@color/white"
+            android:elevation="10dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <!-- Photo -->
         <ImageView
             android:id="@+id/ivPhoto"

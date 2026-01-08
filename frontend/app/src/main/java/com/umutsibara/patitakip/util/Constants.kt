@@ -9,4 +9,9 @@ object Constants {
     const val KEY_TOKEN = "token"
     const val KEY_USER_ID = "user_id"
     const val KEY_USER_NAME = "user_name"
+    const val KEY_USER_ROLE = "user_role"
+
+    // Admin Endpoints
+    const val ENDPOINT_ADMIN_REPORTS = "admin/reports"
+    const val ENDPOINT_ADMIN_FEEDINGS = "admin/feedings"
 }

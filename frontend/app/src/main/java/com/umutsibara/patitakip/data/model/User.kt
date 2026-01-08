@@ -34,6 +34,7 @@ data class User(
         @SerializedName("id") val id: Int,
         @SerializedName("kullanici_adi") val username: String,
         @SerializedName("eposta") val email: String,
+        @SerializedName("rol") val role: String? = "gonullu",
         @SerializedName("puan") val score: Int? = 0,
         @SerializedName("rozetler") val badges: List<String>? = null
 )

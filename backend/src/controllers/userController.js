@@ -95,7 +95,7 @@ exports.getProfile = async (req, res) => {
         // 1. Kullanıcının Temel Bilgileri
         // View yerine doğrudan tablo sorguluyoruz, yeni alanlar için.
         const userQuery = `
-            SELECT kullanici_id, kullanici_adi, eposta, puan, rutbe, konum, avatar_url, olusturulma_tarihi 
+            SELECT kullanici_id, kullanici_adi, eposta, puan, rutbe, rol, konum, avatar_url, olusturulma_tarihi 
             FROM kullanicilar 
             WHERE kullanici_id = $1
         `;

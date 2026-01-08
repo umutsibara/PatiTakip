@@ -42,7 +42,7 @@ class RegisterViewModel(
                         
                         // Save session
                         authData.token?.let { sessionManager.saveAuthToken(it) }
-                        sessionManager.saveUser(authData.id, authData.username)
+                        sessionManager.saveUser(authData.id, authData.username, authData.role ?: "gonullu")
                         
                         _registerSuccess.value = authData
                     } else {

@@ -39,4 +39,9 @@ interface ApiService {
 
     @GET("animal-types")
     suspend fun getAnimalTypes(): Response<AnimalTypesResponse>
+
+    @retrofit2.http.DELETE("admin/reports/{id}")
+    suspend fun deleteReportAdmin(
+        @retrofit2.http.Path("id") id: Int
+    ): Response<Void>
 }

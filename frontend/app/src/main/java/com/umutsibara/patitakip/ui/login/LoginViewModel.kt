@@ -34,12 +34,13 @@ class LoginViewModel(
                         val authData = authResponse.data
                         if (authData.token != null) {
                             sessionManager.saveAuthToken(authData.token)
-                            sessionManager.saveUser(authData.id, authData.username)
+                            sessionManager.saveUser(authData.id, authData.username, authData.role ?: "gonullu")
                             
                             val user = User(
                                 id = authData.id,
                                 username = authData.username,
                                 email = authData.email,
+                                role = authData.role ?: "gonullu",
                                 score = authData.score,
                                 badges = null // AuthData doesn't have badges for now
                             )

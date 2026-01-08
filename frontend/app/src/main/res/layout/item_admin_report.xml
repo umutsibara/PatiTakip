@@ -24,14 +24,13 @@
             tools:src="@drawable/ic_launcher_background"
             tools:ignore="ContentDescription" />
 
-        <!-- Gradient Overlay for Contrast -->
+        <!-- Gradient Overlay -->
         <View
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:background="@drawable/gradient_bottom_sheet_up"
             app:layout_constraintBottom_toBottomOf="@id/ivReportImage"
-            android:visibility="gone" /> <!-- Could add a drawable for checking, leaving gone for now
-        simplifying -->
+            android:visibility="gone" />
 
         <!-- Category Tag -->
         <com.google.android.material.card.MaterialCardView
@@ -58,7 +57,7 @@
                 tools:text="İHBAR" />
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Delete Button (Admin Only) -->
+        <!-- Delete Button (Admin) -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnDelete"
             style="@style/Widget.Material3.Button.Icon"
@@ -71,9 +70,9 @@
             app:icon="@drawable/ic_delete"
             app:iconTint="@color/white"
             android:elevation="10dp"
-            android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
 
         <!-- Content Section -->
         <LinearLayout

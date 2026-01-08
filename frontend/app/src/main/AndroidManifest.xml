@@ -48,6 +48,22 @@
             android:name=".ui.register.RegisterActivity"
             android:exported="false"
             android:theme="@style/Theme.PatiTakip" />
+
+        <!-- Admin Activity Theme -->
+        <activity
+            android:name=".ui.admin.AdminActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PatiTakip.NoActionBar" />
+
+        <activity
+            android:name=".ui.admin.AdminReportListActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PatiTakip.NoActionBar" />
+
+        <activity
+            android:name=".ui.admin.AdminFeedingListActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PatiTakip.NoActionBar" />
     </application>
 
 </manifest>

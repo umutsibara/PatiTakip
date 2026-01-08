@@ -15,15 +15,20 @@ class SessionManager(context: Context) {
         return prefs.getString(Constants.KEY_TOKEN, null)
     }
 
-    fun saveUser(id: Int, username: String) {
+    fun saveUser(id: Int, username: String, role: String) {
         prefs.edit()
                 .putInt(Constants.KEY_USER_ID, id)
                 .putString(Constants.KEY_USER_NAME, username)
+                .putString(Constants.KEY_USER_ROLE, role)
                 .apply()
     }
 
     fun getUserId(): Int {
         return prefs.getInt(Constants.KEY_USER_ID, -1)
+    }
+    
+    fun getUserRole(): String {
+        return prefs.getString(Constants.KEY_USER_ROLE, "gonullu") ?: "gonullu"
     }
 
     fun isLoggedIn(): Boolean {

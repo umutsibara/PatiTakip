@@ -75,17 +75,38 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter = ReportAdapter(emptyList()) { report ->
-            // Navigate to detail screen
-            val detailFragment = com.umutsibara.patitakip.ui.detail.ReportDetailFragment.newInstance(report)
-            parentFragmentManager
-                .beginTransaction()
-                .replace(R.id.fragment_container, detailFragment)
-                .addToBackStack(null)
-                .commit()
-        }
+        val sessionManager = com.umutsibara.patitakip.util.SessionManager(requireContext())
+        val userRole = sessionManager.getUserRole()
+
+        adapter = ReportAdapter(
+            emptyList(), 
+            userRole,
+            onReportClick = { report ->
+                // Navigate to detail screen
+                val detailFragment = com.umutsibara.patitakip.ui.detail.ReportDetailFragment.newInstance(report)
+                parentFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, detailFragment)
+                    .addToBackStack(null)
+                    .commit()
+            },
+            onDeleteClick = { report ->
+                confirmDelete(report)
+            }
+        )
         binding.rvReports.layoutManager = LinearLayoutManager(context)
         binding.rvReports.adapter = adapter
+    }
+
+    private fun confirmDelete(report: com.umutsibara.patitakip.data.model.Report) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("İhbarı Sil?")
+            .setMessage("Bu ihbarı ana sayfadan kaldırmak istediğinize emin misiniz? (Admin Yetkisi)")
+            .setPositiveButton("Sil") { _, _ ->
+                viewModel.deleteReport(report.id)
+            }
+            .setNegativeButton("İptal", null)
+            .show()
     }
 
     private fun setupViewModel() {

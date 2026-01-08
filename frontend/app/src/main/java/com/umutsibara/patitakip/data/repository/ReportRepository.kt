@@ -24,4 +24,8 @@ class ReportRepository(private val apiService: ApiService) {
     suspend fun getAnimalTypes(): Response<AnimalTypesResponse> {
         return apiService.getAnimalTypes()
     }
+
+    suspend fun deleteReport(id: Int): Response<Void> {
+        return apiService.deleteReportAdmin(id)
+    }
 }

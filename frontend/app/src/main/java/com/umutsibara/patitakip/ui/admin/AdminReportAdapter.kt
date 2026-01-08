@@ -1,4 +1,4 @@
-package com.umutsibara.patitakip.ui.home
+package com.umutsibara.patitakip.ui.admin
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -9,46 +9,33 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.umutsibara.patitakip.R
 import com.umutsibara.patitakip.data.model.Report
-import com.umutsibara.patitakip.databinding.ItemReportBinding
+import com.umutsibara.patitakip.databinding.ItemAdminReportBinding
 import com.umutsibara.patitakip.util.Constants
 
-class ReportAdapter(
+class AdminReportAdapter(
     private var reports: List<Report>,
-    private val userRole: String = "gonullu",
-    private val onReportClick: (Report) -> Unit,
-    private val onDeleteClick: ((Report) -> Unit)? = null
-) : RecyclerView.Adapter<ReportAdapter.ReportViewHolder>() {
+    private val onDeleteClick: (Report) -> Unit
+) : RecyclerView.Adapter<AdminReportAdapter.ReportViewHolder>() {
 
-    class ReportViewHolder(val binding: ItemReportBinding) : RecyclerView.ViewHolder(binding.root)
+    class ReportViewHolder(val binding: ItemAdminReportBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReportViewHolder {
-        val binding = ItemReportBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemAdminReportBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ReportViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ReportViewHolder, position: Int) {
         val report = reports[position]
         
-        // Click listener for detail navigation
-        holder.binding.root.setOnClickListener {
-            onReportClick(report)
-        }
-
-        // Admin Delete Button
-        if (userRole == "yonetici" || userRole == "admin") {
-            holder.binding.btnDelete.visibility = View.VISIBLE
-            holder.binding.btnDelete.setOnClickListener {
-                onDeleteClick?.invoke(report)
-            }
-        } else {
-            holder.binding.btnDelete.visibility = View.GONE
+        holder.binding.btnDelete.setOnClickListener {
+            onDeleteClick(report)
         }
         
         holder.binding.apply {
             tvTitle.text = report.title ?: "Başlık yok"
             tvDescription.text = report.description ?: "Açıklama yok"
             
-            // Category with null safety
+            // Category setup (Same as ReportAdapter)
             tvCategory.text = when (report.category) {
                 "REPORT" -> "İhbar"
                 "FEEDING" -> "Besleme"
@@ -58,7 +45,6 @@ class ReportAdapter(
             }
             tvUser.text = report.creatorName ?: "Anonim"
             
-            // Animal type with null safety
             if (!report.animalType.isNullOrEmpty()) {
                 val emoji = getAnimalEmoji(report.animalType)
                 cvAnimalType.text = "$emoji ${report.animalType}"
@@ -67,23 +53,20 @@ class ReportAdapter(
                 cvAnimalType.visibility = View.GONE
             }
 
-            // Category badge colors with null safety
             val categoryColor = when (report.category) {
-                "REPORT" -> "#E53935" // Red
-                "FEEDING" -> "#43A047" // Green
-                "ADOPTION" -> "#1E88E5" // Blue
-                null -> "#9E9E9E" // Gray for null
-                else -> "#9E9E9E" // Gray for unknown
+                "REPORT" -> "#E53935" 
+                "FEEDING" -> "#43A047" 
+                "ADOPTION" -> "#1E88E5" 
+                null -> "#9E9E9E" 
+                else -> "#9E9E9E" 
             }
             cvCategory.setCardBackgroundColor(Color.parseColor(categoryColor))
 
-            // Load photo with full URL
+            // Load photo
             val photoUrl = report.photoUrl
             if (!photoUrl.isNullOrEmpty()) {
                 val baseUrl = Constants.BASE_URL.removeSuffix("api/")
                 val fullPhotoUrl = baseUrl + photoUrl.removePrefix("/")
-                
-                android.util.Log.d("ReportAdapter", "Attempting to load image from URL: $fullPhotoUrl")
                 
                 Glide.with(root.context)
                     .load(fullPhotoUrl)
@@ -95,13 +78,11 @@ class ReportAdapter(
                 
                 ivReportImage.visibility = View.VISIBLE
             } else {
-                // Show placeholder instead of hiding
                 Glide.with(root.context)
-                    .load(R.drawable.ic_add_photo) // Use app icon or specific placeholder
+                    .load(R.drawable.ic_add_photo)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .centerCrop()
                     .into(ivReportImage)
-                    
                 ivReportImage.visibility = View.VISIBLE
             }
         }
