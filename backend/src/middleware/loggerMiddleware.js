@@ -31,11 +31,11 @@ const loggerMiddleware = async (req, res, next) => {
         // Veritabanına Asenkron Kayıt (Await etmiyoruz, client beklemesin)
         try {
             const query = `
-                INSERT INTO kullanici_loglari (kullanici_id, islem_turu, aciklama, ip_adresi)
-                VALUES ($1, $2, $3, $4)
+                INSERT INTO sistem_loglari (kullanici_id, islem_turu, endpoint, http_metodu, ip_adresi, durum_kodu)
+                VALUES ($1, $2, $3, $4, $5, $6)
             `;
             // Log hatası akışı bozmasın diye catch bloğu içinde
-            db.query(query, [kullanici_id, islem_turu, aciklama, ip_adresi]).catch(err => {
+            db.query(query, [kullanici_id, islem_turu, url, method, ip_adresi, res.statusCode]).catch(err => {
                 console.error('Loglama Hatası:', err.message);
             });
         } catch (error) {

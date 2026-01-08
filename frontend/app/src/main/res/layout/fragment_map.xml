@@ -1,178 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.map.MapFragment">
+    android:orientation="vertical"
+    android:gravity="center">
 
-    <!-- Map Fullscreen -->
-    <fragment
-        android:id="@+id/mapFragment"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <!-- Filter Chips Container -->
-    <HorizontalScrollView
-        android:id="@+id/chipScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="16dp"
-        android:paddingHorizontal="8dp"
-        android:clipToPadding="false"
-        android:scrollbars="none"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroupCategories"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:singleSelection="true"
-            app:selectionRequired="true"
-            android:paddingHorizontal="8dp">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipAll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tümü"
-                android:checked="true"
-                style="@style/Widget.PatiTakip.Chip" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipReport"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="İhbar"
-                style="@style/Widget.PatiTakip.Chip"
-                app:chipIconTint="@color/category_report" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipFeeding"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Besleme"
-                style="@style/Widget.PatiTakip.Chip" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipAdoption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sahiplendirme"
-                style="@style/Widget.PatiTakip.Chip" />
-
-        </com.google.android.material.chip.ChipGroup>
-    </HorizontalScrollView>
-
-    <!-- Map Interactions -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabMyLocation"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="24dp"
-        android:layout_marginBottom="160dp"
-        android:src="@drawable/ic_location"
-        app:backgroundTint="@color/white"
-        app:tint="@color/text_secondary"
-        android:contentDescription="Konumum" />
+        android:text="🗺️"
+        android:textSize="48sp"
+        android:layout_marginBottom="16dp" />
 
-    <!-- Bottom Sheet -->
-    <LinearLayout
-        android:id="@+id/bottomSheet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/bg_bottom_sheet"
-        android:padding="24dp"
-        android:elevation="16dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        app:behavior_peekHeight="0dp"
-        app:behavior_hideable="true">
-
-        <!-- Handle -->
-        <View
-            android:layout_width="40dp"
-            android:layout_height="4dp"
-            android:background="@color/text_hint"
-            android:layout_gravity="center"
-            android:layout_marginBottom="16dp"
-            android:alpha="0.5" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="12dp">
-
-            <TextView
-                android:id="@+id/tvBottomSheetCategory"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="KATEGORİ"
-                android:textSize="10sp"
-                android:textStyle="bold"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp"
-                android:background="@color/category_report"
-                android:textColor="@color/white"
-                android:layout_marginEnd="8dp" />
-
-            <TextView
-                android:id="@+id/tvBottomSheetTitle"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="İhbar Başlığı"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textColor="@color/text_primary" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvBottomSheetDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:text="Açıklama metni buraya gelecek..."
-            android:textSize="14sp"
-            android:lineSpacingExtra="4dp"
-            android:textColor="@color/text_secondary"
-            android:maxLines="3"
-            android:ellipsize="end" />
-
-        <Button
-            android:id="@+id/btnViewDetails"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="DETAYLARI GÖR"
-            style="@style/Widget.PatiTakip.Button" />
-
-        <Button
-            android:id="@+id/btnDirections"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="YOL TARİFİ AL"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            app:strokeColor="@color/primary"
-            android:textColor="@color/primary"
-            app:icon="@drawable/ic_location"
-            app:iconTint="@color/primary"
-            app:iconGravity="textStart" />
-
-    </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/progressBar"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        android:text="Harita"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Yakında eklenecek..."
+        android:textSize="14sp"
+        android:textColor="#999999" />
+
+</LinearLayout>

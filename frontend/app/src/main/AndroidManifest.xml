@@ -37,6 +37,12 @@
             </intent-filter>
         </activity>
 
+        <!-- Auth Activity -->
+        <activity
+            android:name=".ui.activities.AuthActivity"
+            android:exported="false"
+            android:theme="@style/Theme.PatiTakip" />
+
         <!-- Login Activity -->
         <activity
             android:name=".ui.login.LoginActivity"

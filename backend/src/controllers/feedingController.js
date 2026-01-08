@@ -27,8 +27,7 @@ exports.createFeeding = async (req, res) => {
 // Beslemeleri Listele (CRUD - Read)
 exports.getAllFeedings = async (req, res) => {
     try {
-        // Soft delete kontrolü eklendi
-        const result = await db.query('SELECT * FROM beslemeler WHERE deleted_at IS NULL ORDER BY besleme_zamani DESC LIMIT 50');
+        const result = await db.query('SELECT * FROM beslemeler ORDER BY besleme_zamani DESC LIMIT 50');
         res.status(200).json({ success: true, count: result.rows.length, data: result.rows });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });

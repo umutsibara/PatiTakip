@@ -22,10 +22,33 @@ exports.register = async (req, res) => {
         
         const result = await db.query(query, [kullanici_adi, eposta, sifre_hash]);
         
+        const user = result.rows[0];
+        
+        // Token oluştur (kayıttan sonra otomatik giriş için)
+        const jwt = require('jsonwebtoken');
+        const { JWT_SECRET } = require('../middleware/authMiddleware');
+        const token = jwt.sign(
+            { id: user.kullanici_id, eposta: eposta, rol: user.rol },
+            JWT_SECRET,
+            { expiresIn: '24h' }
+        );
+        
         res.status(201).json({
             success: true,
-            data: result.rows[0],
-            message: 'Kullanıcı başarıyla oluşturuldu.'
+            message: 'Kullanıcı başarıyla oluşturuldu.',
+            token: token,
+            user: {
+                kullanici_id: user.kullanici_id,
+                kullanici_adi: user.kullanici_adi,
+                eposta: eposta,
+                tam_isim: null,
+                avatar_url: user.avatar_url ||'',
+                puan: user.puan,
+                rutbe: user.rutbe,
+                toplam_ihbar_sayisi: 0,
+                toplam_besleme_sayisi: 0,
+                toplam_yorum_sayisi: 0
+            }
         });
     } catch (error) {
         // Unique constraint hatası (Aynı email veya kullanıcı adı)
@@ -70,16 +93,18 @@ exports.login = async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'Giriş başarılı.',
-            data: {
-                id: user.kullanici_id,
-                isim: user.kullanici_adi,
-                rol: user.rol,
+            token: token,
+            user: {
+                kullanici_id: user.kullanici_id,
+                kullanici_adi: user.kullanici_adi,
                 eposta: user.eposta,
+                tam_isim: user.tam_isim,
                 avatar_url: user.avatar_url,
                 puan: user.puan,
                 rutbe: user.rutbe,
-                konum: user.konum,
-                token: token
+                toplam_ihbar_sayisi: user.toplam_ihbar_sayisi,
+                toplam_besleme_sayisi: user.toplam_besleme_sayisi,
+                toplam_yorum_sayisi: user.toplam_yorum_sayisi
             }
         });
     } catch (error) {
