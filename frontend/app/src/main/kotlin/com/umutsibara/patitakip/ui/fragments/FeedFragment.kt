@@ -29,41 +29,39 @@ class FeedFragment : Fragment() {
     }
     
     private fun setupClickListeners() {
-        // Feed an Animal Card
+        // Feed an Animal Card - Navigate to FEEDING posts only
         binding.cardFeedAnimal.setOnClickListener {
-            // Navigate to feeding timeline
+            val fragment = ReportsFragment.newInstance("FEEDING")
             parentFragmentManager.beginTransaction()
-                .replace(com.umutsibara.patitakip.R.id.fragmentContainer, FeedingFragment())
+                .replace(R.id.fragmentContainer, fragment)
                 .addToBackStack(null)
                 .commit()
         }
         
-        // Report Animal Card
+        // Report Animal Card - Navigate to REPORT category posts
         binding.cardReportAnimal.setOnClickListener {
+            val fragment = ReportsFragment.newInstance("REPORT")
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, CreateReportFragment())
+                .replace(R.id.fragmentContainer, fragment)
                 .addToBackStack(null)
                 .commit()
         }
         
-        // Adopt Companion Card
+        // Adopt Companion Card - Navigate to ADOPTION category
         binding.cardAdoptCompanion.setOnClickListener {
-            Toast.makeText(
-                requireContext(),
-                "Sahiplendirme özelliği yakında...",
-                Toast.LENGTH_SHORT
-            ).show()
-            // TODO: Navigate to adoption feature
+            val fragment = ReportsFragment.newInstance("ADOPTION")
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, fragment)
+                .addToBackStack(null)
+                .commit()
         }
         
         // View Full Map Button
         binding.btnViewMap.setOnClickListener {
-            Toast.makeText(
-                requireContext(),
-                "Harita görünümüne yönlendiriliyor...",
-                Toast.LENGTH_SHORT
-            ).show()
-            // TODO: Navigate to map fragment
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainer, MapFragment())
+                .addToBackStack(null)
+                .commit()
         }
     }
     

@@ -37,9 +37,11 @@ class CreateReportFragment : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     
     private var selectedSpecies: String = "Kedi"
+    private var selectedStatus: String = "Kritik / Yaralı"
     private var selectedPhotoUris: MutableList<Uri> = mutableListOf()
     private var currentLatitude: Double? = null
     private var currentLongitude: Double? = null
+    private var isEmergencyMode: Boolean = false
     
     private val photoPickerLauncher = registerForActivityResult(
         ActivityResultContracts.GetMultipleContents()
@@ -66,7 +68,9 @@ class CreateReportFragment : Fragment() {
         setupBackButton()
         setupSharingTypeSpinner()
         setupSpeciesSelection()
+        setupStatusSpinner()
         setupLocationButton()
+        setupEmergencyLocationButton()
         setupPhotoSelection()
         setupSubmitButton()
     }
@@ -78,7 +82,7 @@ class CreateReportFragment : Fragment() {
     }
     
     private fun setupSharingTypeSpinner() {
-        val sharingTypes = arrayOf("Besleme", "Gönderi", "Sahiplendirme")
+        val sharingTypes = arrayOf("Besleme", "Gönderi", "Sahiplendirme", "Acil İhbar")
         val adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_item,
@@ -86,6 +90,26 @@ class CreateReportFragment : Fragment() {
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerSharingType.adapter = adapter
+        
+        // Set default to "Gönderi" (index 1)
+        binding.spinnerSharingType.setSelection(1)
+        
+        // Listen for emergency mode selection
+        binding.spinnerSharingType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                isEmergencyMode = sharingTypes[position] == "Acil İhbar"
+                toggleEmergencyUI(isEmergencyMode)
+            }
+            
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+    
+    private fun toggleEmergencyUI(showEmergency: Boolean) {
+        binding.urgencyIndicatorLayout.visibility = if (showEmergency) View.VISIBLE else View.GONE
+        binding.locationOverviewLayout.visibility = if (showEmergency) View.VISIBLE else View.GONE
+        binding.statusLayout.visibility = if (showEmergency) View.VISIBLE else View.GONE
+        binding.volunteerUpdatesLayout.visibility = if (showEmergency) View.VISIBLE else View.GONE
     }
     
     private fun setupSpeciesSelection() {
@@ -125,9 +149,43 @@ class CreateReportFragment : Fragment() {
         binding.btnSpeciesOther.isSelected = false
     }
     
+    private fun setupStatusSpinner() {
+        val statusOptions = arrayOf(
+            "Bir durum seçin",
+            "Kritik / Yaralı",
+            "Hasta",
+            "Kayıp",
+            "Aç / Susuz"
+        )
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            statusOptions
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerStatus.adapter = adapter
+        
+        binding.spinnerStatus.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (position > 0) {
+                    selectedStatus = statusOptions[position]
+                }
+            }
+            
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+    
     private fun setupLocationButton() {
         binding.btnUseCurrentLocation.setOnClickListener {
             getCurrentLocation()
+        }
+    }
+    
+    private fun setupEmergencyLocationButton() {
+        binding.btnNextToLocation.setOnClickListener {
+            getCurrentLocation()
+            Toast.makeText(requireContext(), "✅ Konumunuz kaydedildi - Acil ekipler devreye giriyor!", Toast.LENGTH_SHORT).show()
         }
     }
     
@@ -153,13 +211,13 @@ class CreateReportFragment : Fragment() {
                     binding.tvLocationStatus.text = "✅ Konum eklendi (${String.format("%.4f, %.4f", 
                         location.latitude, location.longitude)})"
                     binding.tvLocationStatus.setTextColor(androidx.core.content.ContextCompat.getColor(requireContext(), R.color.success))
-                    Toast.makeText(requireContext(), "Konum başarıyla eklendi!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "✅ Konum başarıyla eklendi!", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(requireContext(), "Konum alınamadı", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "❌ Konum alınamadı. Lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener {
-                Toast.makeText(requireContext(), "Konum hatası: ${it.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "❌ Konum hatası: ${it.message}", Toast.LENGTH_SHORT).show()
             }
     }
     
@@ -230,22 +288,48 @@ class CreateReportFragment : Fragment() {
         
         // Validation
         if (caption.isEmpty()) {
-            Toast.makeText(requireContext(), "Lütfen bir başlık girin", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "⚠️ Lütfen bir başlık girin", Toast.LENGTH_SHORT).show()
             return
         }
         
         if (description.isEmpty()) {
-            Toast.makeText(requireContext(), "Lütfen detaylı açıklama girin", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "⚠️ Lütfen detaylı açıklama girin", Toast.LENGTH_SHORT).show()
             return
         }
         
         if (currentLatitude == null || currentLongitude == null) {
-            Toast.makeText(requireContext(), "Lütfen konum ekleyin", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "⚠️ Lütfen konum ekleyin", Toast.LENGTH_SHORT).show()
             return
         }
         
-        // Get sharing type
-        val category = binding.spinnerSharingType.selectedItem.toString().uppercase()
+        // Emergency validation
+        if (isEmergencyMode && binding.spinnerStatus.selectedItemPosition == 0) {
+            Toast.makeText(requireContext(), "⚠️ Lütfen acil durum türünü seçin", Toast.LENGTH_SHORT).show()
+            return
+        }
+        
+        // Get sharing type and category
+        val sharingType = binding.spinnerSharingType.selectedItem.toString()
+        val category = when(sharingType) {
+            "Besleme" -> "FEEDING"
+            "Gönderi" -> "REPORT"  // Added explicit mapping
+            "Sahiplendirme" -> "ADOPTION"
+            "Acil İhbar" -> "REPORT"
+            else -> "REPORT"
+        }
+        
+        // Set ihbar_turu based on emergency status or category
+        val ihbarTuru = if (isEmergencyMode) {
+            when(selectedStatus) {
+                "Kritik / Yaralı" -> "Yaralanma"
+                "Hasta" -> "Hastalik"
+                "Kayıp" -> "Kayip"
+                "Aç / Susuz" -> "Aclik"
+                else -> "Acil"
+            }
+        } else {
+            "Genel"
+        }
         
         val request = CreateReportRequest(
             kullaniciId = prefsManager.getUserId(),
@@ -255,7 +339,7 @@ class CreateReportFragment : Fragment() {
             boylam = currentLongitude ?: 28.9784,
             kategori = category,
             hayvanTuru = selectedSpecies,
-            ihbarTuru = category,
+            ihbarTuru = ihbarTuru,
             adres = null,
             fotoId = null // TODO: Photo upload
         )
@@ -273,10 +357,15 @@ class CreateReportFragment : Fragment() {
                     .createReport(request)
                 
                 if (response.isSuccessful && response.body()?.success == true) {
+                    val message = if (isEmergencyMode) {
+                        "🚨 Acil ihbar başarıyla gönderildi! Ekipler bilgilendirildi."
+                    } else {
+                        "✅ Gönderi başarıyla oluşturuldu!"
+                    }
                     Toast.makeText(
                         requireContext(),
-                        "Gönderi başarıyla oluşturuldu!",
-                        Toast.LENGTH_SHORT
+                        message,
+                        Toast.LENGTH_LONG
                     ).show()
                     
                     // Navigate back
@@ -284,15 +373,15 @@ class CreateReportFragment : Fragment() {
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        "Hata: ${response.body()?.message}",
+                        "❌ Hata: ${response.body()?.message ?: "Bilinmeyen hata"}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(
                     requireContext(),
-                    "Bağlantı hatası: ${e.message}",
-                    Toast.LENGTH_SHORT
+                    "❌ Bağlantı hatası: ${e.message}",
+                    Toast.LENGTH_LONG
                 ).show()
             } finally {
                 binding.progressBar.visibility = View.GONE

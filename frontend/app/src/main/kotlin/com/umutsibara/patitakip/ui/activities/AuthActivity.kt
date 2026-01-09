@@ -95,13 +95,28 @@ class AuthActivity : AppCompatActivity() {
                     val body = response.body()!!
                     val userData = body.data
                     
+                    // DEBUG: Response kontrolü
+                    android.util.Log.d("AuthActivity", "Login Response: success=${body.success}")
+                    android.util.Log.d("AuthActivity", "User Data: $userData")
+                    android.util.Log.d("AuthActivity", "Token: ${userData?.token}")
+                    
                     // Token ve kullanıcı bilgilerini kaydet
-                    userData?.token?.let { prefsManager.saveToken(it) }
+                    userData?.token?.let { 
+                        prefsManager.saveToken(it)
+                        android.util.Log.d("AuthActivity", "Token saved: $it")
+                    } ?: android.util.Log.e("AuthActivity", "ERROR: Token is NULL!")
+                    
                     userData?.let {
                         prefsManager.saveUserId(it.getUserId())
                         prefsManager.saveUserName(it.getUsername())
+                        android.util.Log.d("AuthActivity", "User ID: ${it.getUserId()}, Username: ${it.getUsername()}")
                     }
                     prefsManager.setLoggedIn(true)
+                    
+                    // DEBUG: Kaydedilen değerleri kontrol et
+                    android.util.Log.d("AuthActivity", "Saved - isLoggedIn: ${prefsManager.isLoggedIn()}")
+                    android.util.Log.d("AuthActivity", "Saved - Token: ${prefsManager.getToken()}")
+                    android.util.Log.d("AuthActivity", "Saved - UserId: ${prefsManager.getUserId()}")
                     
                     Toast.makeText(this@AuthActivity, "Giriş başarılı!", Toast.LENGTH_SHORT).show()
                     

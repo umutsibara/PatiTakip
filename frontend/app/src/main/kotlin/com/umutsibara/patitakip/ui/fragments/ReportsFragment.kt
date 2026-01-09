@@ -8,28 +8,46 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.umutsibara.patitakip.databinding.FragmentFeedingBinding
+import com.umutsibara.patitakip.databinding.FragmentReportsBinding
 import com.umutsibara.patitakip.network.ApiClient
-import com.umutsibara.patitakip.network.models.Feeding
-import com.umutsibara.patitakip.ui.adapters.FeedingAdapter
+import com.umutsibara.patitakip.network.models.Report
+import com.umutsibara.patitakip.ui.adapters.ReportAdapter
 import com.umutsibara.patitakip.utils.PreferencesManager
 import kotlinx.coroutines.launch
 
-class FeedingFragment : Fragment() {
+class ReportsFragment : Fragment() {
     
-    private var _binding: FragmentFeedingBinding? = null
+    private var _binding: FragmentReportsBinding? = null
     private val binding get() = _binding!!
     
     private lateinit var prefsManager: PreferencesManager
-    private lateinit var feedingAdapter: FeedingAdapter
-    private val feedings = mutableListOf<Feeding>()
+    private lateinit var reportAdapter: ReportAdapter
+    private val reports = mutableListOf<Report>()
+    private var categoryFilter: String? = null
+    
+    companion object {
+        private const val ARG_CATEGORY = "category"
+        
+        fun newInstance(category: String? = null): ReportsFragment {
+            return ReportsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_CATEGORY, category)
+                }
+            }
+        }
+    }
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        categoryFilter = arguments?.getString(ARG_CATEGORY)
+    }
     
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFeedingBinding.inflate(inflater, container, false)
+        _binding = FragmentReportsBinding.inflate(inflater, container, false)
         prefsManager = PreferencesManager(requireContext())
         return binding.root
     }
@@ -39,7 +57,21 @@ class FeedingFragment : Fragment() {
         setupToolbar()
         setupRecyclerView()
         setupSwipeRefresh()
-        loadFeedings()
+        setupSwipeRefresh()
+        updatePageTitle()
+        loadReports()
+    }
+    
+    private fun updatePageTitle() {
+        val title = when (categoryFilter) {
+            "FEEDING" -> "Besleme İhbarları"
+            "ADOPTION" -> "Sahiplendirme İlanları"
+            "REPORT" -> "Acil İhbarlar"
+            "SERVICE" -> "Hizmet İlanları"
+            "DONATION" -> "Bağış İlanları"
+            else -> "Tüm İhbarlar"
+        }
+        binding.tvPageTitle.text = title
     }
     
     private fun setupToolbar() {
@@ -49,61 +81,54 @@ class FeedingFragment : Fragment() {
     }
     
     private fun setupRecyclerView() {
-        feedingAdapter = FeedingAdapter(
-            feedings = feedings,
-            onLikeClick = { feeding ->
-                toggleLike(feeding)
-            },
-            onCommentClick = { feeding ->
+        reportAdapter = ReportAdapter(
+            reports = reports,
+            onReportClick = { report ->
                 Toast.makeText(
                     requireContext(),
-                    "Yorumlar: ${feeding.commentCount}",
-                    Toast.LENGTH_SHORT
-                ).show()
-                // TODO: Navigate to detail/comments
-            },
-            onShareClick = { feeding ->
-                Toast.makeText(
-                    requireContext(),
-                    "Paylaşım özelliği yakında...",
-                    Toast.LENGTH_SHORT
-                ).show()
-            },
-            onCardClick = { feeding ->
-                Toast.makeText(
-                    requireContext(),
-                    "Besleme detayı: ${feeding.username}",
+                    "İhbar detayı: ${report.kullaniciAdi}",
                     Toast.LENGTH_SHORT
                 ).show()
                 // TODO: Navigate to detail screen
+            },
+            onLikeClick = { report ->
+                toggleLike(report)
+            },
+            onCommentClick = { report ->
+                Toast.makeText(
+                    requireContext(),
+                    "Yorumlar: ${report.yorumSayisi}",
+                    Toast.LENGTH_SHORT
+                ).show()
+                // TODO: Navigate to detail/comments
             }
         )
         
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = feedingAdapter
+            adapter = reportAdapter
         }
     }
     
     private fun setupSwipeRefresh() {
         binding.swipeRefresh.setOnRefreshListener {
-            loadFeedings()
+            loadReports()
         }
     }
     
-    private fun loadFeedings() {
+    private fun loadReports() {
         binding.swipeRefresh.isRefreshing = true
         binding.progressBar.visibility = View.VISIBLE
         
         // Using mock data for demonstration
         try {
-            val mockFeedings = com.umutsibara.patitakip.utils.MockDataProvider.getMockFeedings()
-            feedings.clear()
-            feedings.addAll(mockFeedings)
-            feedingAdapter.notifyDataSetChanged()
+            val mockReports = com.umutsibara.patitakip.utils.MockDataProvider.getMockReports(categoryFilter)
+            reports.clear()
+            reports.addAll(mockReports)
+            reportAdapter.notifyDataSetChanged()
             
             // Empty state
-            if (feedings.isEmpty()) {
+            if (reports.isEmpty()) {
                 binding.llEmpty.visibility = View.VISIBLE
                 binding.recyclerView.visibility = View.GONE
             } else {
@@ -127,16 +152,20 @@ class FeedingFragment : Fragment() {
         lifecycleScope.launch {
             try {
                 val response = ApiClient.getApiService(prefsManager.getToken())
-                    .getFeedings(limit = 50, offset = 0)
+                    .getReports(
+                        limit = 50, 
+                        offset = 0,
+                        category = categoryFilter  // Apply category filter
+                    )
                 
                 if (response.isSuccessful && response.body()?.success == true) {
-                    val newFeedings = response.body()?.data ?: emptyList()
-                    feedings.clear()
-                    feedings.addAll(newFeedings)
-                    feedingAdapter.notifyDataSetChanged()
+                    val newReports = response.body()?.data ?: emptyList()
+                    reports.clear()
+                    reports.addAll(newReports)
+                    reportAdapter.notifyDataSetChanged()
                     
                     // Empty state
-                    if (feedings.isEmpty()) {
+                    if (reports.isEmpty()) {
                         binding.llEmpty.visibility = View.VISIBLE
                         binding.recyclerView.visibility = View.GONE
                     } else {
@@ -146,7 +175,7 @@ class FeedingFragment : Fragment() {
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        "Beslemeler yüklenemedi: ${response.body()?.message}",
+                        "İhbarlar yüklenemedi: ${response.body()?.message}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -164,7 +193,7 @@ class FeedingFragment : Fragment() {
         */
     }
     
-    private fun toggleLike(feeding: Feeding) {
+    private fun toggleLike(report: Report) {
         // TODO: Implement like toggle with API
         Toast.makeText(requireContext(), "Beğenme özelliği yakında...", Toast.LENGTH_SHORT).show()
     }

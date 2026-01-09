@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.umutsibara.patitakip.databinding.FragmentProfileBinding
 import com.umutsibara.patitakip.utils.PreferencesManager
@@ -28,8 +29,14 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         // Kullanıcı bilgilerini göster
-        binding.tvUsername.text = prefsManager.getUserName() ?: "Kullanıcı"
-        binding.tvUserId.text = "ID: ${prefsManager.getUserId()}"
+        val username = prefsManager.getUserName() ?: "Kullanıcı"
+        val userId = prefsManager.getUserId()
+        
+        binding.tvUsername.text = username
+        binding.tvUserId.text = "ID: $userId"
+        
+        // Mock statistics for demonstration
+        // TODO: Replace with actual API call when profile endpoint is ready
     }
     
     override fun onDestroyView() {

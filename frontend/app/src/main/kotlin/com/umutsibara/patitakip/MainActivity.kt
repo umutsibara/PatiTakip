@@ -26,13 +26,22 @@ class MainActivity : AppCompatActivity() {
         
         prefsManager = PreferencesManager(this)
         
+        // DEBUG: Token kontrolü
+        android.util.Log.d("MainActivity", "Checking login status...")
+        android.util.Log.d("MainActivity", "isLoggedIn: ${prefsManager.isLoggedIn()}")
+        android.util.Log.d("MainActivity", "Token: ${prefsManager.getToken()}")
+        android.util.Log.d("MainActivity", "UserId: ${prefsManager.getUserId()}")
+        
         // Token kontrolü
         if (!prefsManager.isLoggedIn()) {
             // Login'e yönlendir
+            android.util.Log.d("MainActivity", "Not logged in, redirecting to AuthActivity")
             startActivity(Intent(this, AuthActivity::class.java))
             finish()
             return
         }
+        
+        android.util.Log.d("MainActivity", "User is logged in, showing main UI")
         
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -59,10 +68,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_add -> {
                     loadFragment(com.umutsibara.patitakip.ui.fragments.CreateReportFragment())
-                    true
-                }
-                R.id.nav_chat -> {
-                    Toast.makeText(this, "Mesajlar yakında...", Toast.LENGTH_SHORT).show()
                     true
                 }
                 R.id.nav_profile -> {

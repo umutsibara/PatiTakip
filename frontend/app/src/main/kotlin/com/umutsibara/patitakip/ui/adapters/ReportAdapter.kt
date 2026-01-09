@@ -57,9 +57,12 @@ class ReportAdapter(
                 tvCategory.text = getCategoryText(report.kategori)
                 tvLocation.text = report.adres ?: "Konum bilgisi yok"
                 
-                // Fotoğraf
-                if (!report.fotografUrl.isNullOrEmpty()) {
-                    ivPhoto.load(Constants.BASE_URL.replace("/api/", "") + report.fotografUrl) {
+                
+                // Fotoğraf - use imageUrls list instead of fotografUrl
+                val firstImageUrl = report.imageUrls?.firstOrNull()
+                if (!firstImageUrl.isNullOrEmpty()) {
+                    ivPhoto.load(firstImageUrl) {
+                        crossfade(true)
                         placeholder(R.drawable.ic_launcher_background)
                         error(R.drawable.ic_launcher_background)
                     }

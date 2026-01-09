@@ -27,7 +27,7 @@ interface ApiService {
     suspend fun getReports(
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0,
-        @Query("kategori") category: String? = null,
+        @Query("category") category: String? = null,  // Fixed: was "kategori", should be "category"
         @Query("enlem") lat: Double? = null,
         @Query("boylam") lng: Double? = null,
         @Query("yaricap") radius: Double? = null

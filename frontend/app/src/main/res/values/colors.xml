@@ -39,6 +39,11 @@
     <color name="ripple">#1F000000</color>
     <color name="overlay_dark">#80000000</color>
 
+    <!-- Urgency Levels -->
+    <color name="urgency_critical">#EF5350</color>   <!-- Red for critical emergencies -->
+    <color name="urgency_moderate">#FB8C00</color>   <!-- Orange for moderate -->
+    <color name="urgency_low">#FDD835</color>        <!-- Yellow for low -->
+
     <!-- Standard -->
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>

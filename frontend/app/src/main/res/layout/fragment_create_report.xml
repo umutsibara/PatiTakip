@@ -29,9 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Yeni Gönderi Oluş
-
-tur"
+            android:text="Yeni Gönderi Oluştur"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
@@ -49,6 +47,28 @@ tur"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/divider" />
+
+    <!-- Emergency Urgency Indicator (Hidden by default) -->
+    <LinearLayout
+        android:id="@+id/urgencyIndicatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/btnUrgencyIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="ACİLİYET: KRİTİK / YARALI"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:background="@drawable/bg_urgency_button"
+            android:enabled="false" />
+
+    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -80,6 +100,61 @@ tur"
                 android:background="@drawable/bg_input_field"
                 android:paddingHorizontal="12dp"
                 android:layout_marginBottom="20dp" />
+
+            <!-- Location Overview Section (Emergency Only - Hidden by default) -->
+            <LinearLayout
+                android:id="@+id/locationOverviewLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Konum Önizlemesi"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_primary"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Location Preview Card with Map -->
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:background="@drawable/bg_location_preview"
+                    android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:id="@+id/ivLocationPreview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_map_marker"
+                        android:alpha="0.3" />
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_location"
+                        android:tint="@color/success" />
+
+                </FrameLayout>
+
+                <!-- "I'm right next to the location" button -->
+                <Button
+                    android:id="@+id/btnNextToLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="Konumun hemen yanındayım"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:background="@drawable/bg_button_primary" />
+
+            </LinearLayout>
 
             <!-- Species Section -->
             <TextView
@@ -152,6 +227,33 @@ tur"
                     android:background="@drawable/bg_species_button"
                     android:clickable="true"
                     android:focusable="true" />
+
+            </LinearLayout>
+
+            <!-- Status Section (Emergency Only - Hidden by default) -->
+            <LinearLayout
+                android:id="@+id/statusLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Durum"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_primary"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
+
+                <Spinner
+                    android:id="@+id/spinnerStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/bg_input_field"
+                    android:paddingHorizontal="12dp" />
 
             </LinearLayout>
 
@@ -316,6 +418,95 @@ tur"
                 android:inputType="textMultiLine|textCapSentences"
                 android:maxLines="6"
                 android:layout_marginBottom="32dp" />
+
+            <!-- Volunteer Updates Section (Emergency Only - Hidden by default) -->
+            <LinearLayout
+                android:id="@+id/volunteerUpdatesLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginBottom="24dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gönüllü Güncellemeleri"
+                    android:textSize="13sp"
+                    android:textColor="@color/text_primary"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Volunteer Update Item 1 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:background="@drawable/bg_card"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Veteriner Ahmet"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Yolda, 15 dk içinde orada olacağım."
+                        android:textSize="12sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="2dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2 dakika önce"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_hint"
+                        android:layout_marginTop="4dp" />
+
+                </LinearLayout>
+
+                <!-- Volunteer Update Item 2 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp"
+                    android:background="@drawable/bg_card">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Gönüllü Ayşe"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Konumu onayladı, Ahmet'i bekliyor."
+                        android:textSize="12sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginTop="2dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5 dakika önce"
+                        android:textSize="11sp"
+                        android:textColor="@color/text_hint"
+                        android:layout_marginTop="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <!-- Submit Button -->
             <Button

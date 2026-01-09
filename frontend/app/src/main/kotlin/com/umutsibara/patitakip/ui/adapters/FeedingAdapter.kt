@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.umutsibara.patitakip.R
 import com.umutsibara.patitakip.databinding.ItemFeedingCardBinding
 import com.umutsibara.patitakip.network.models.Feeding
 
@@ -58,16 +60,14 @@ class FeedingAdapter(
             binding.llShareButton.setOnClickListener { onShareClick(feeding) }
             binding.root.setOnClickListener { onCardClick(feeding) }
             
-            // TODO: Load images with Glide/Coil
-            // Glide.with(binding.ivProfilePicture.context)
-            //     .load(feeding.profileImage)
-            //     .placeholder(R.drawable.ic_person_placeholder)
-            //     .into(binding.ivProfilePicture)
-            
-            // Glide.with(binding.ivFeedingPhoto.context)
-            //     .load(feeding.photoUrl)
-            //     .placeholder(R.color.surface_variant)
-            //     .into(binding.ivFeedingPhoto)
+            // Load feeding photo
+            if (!feeding.photoUrl.isNullOrEmpty()) {
+                binding.ivFeedingPhoto.load(feeding.photoUrl) {
+                    crossfade(true)
+                    placeholder(R.drawable.ic_launcher_background)
+                    error(R.drawable.ic_launcher_background)
+                }
+            }
         }
     }
 
