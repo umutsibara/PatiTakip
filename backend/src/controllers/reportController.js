@@ -79,7 +79,7 @@ exports.getAllReports = async (req, res) => {
 };
 
 // Yeni İhbar Oluştur
-// Yeni İhbar/Gönderi Oluştur
+// Yeni İhbar/Gönderi Oluştur (Transaction ile)
 exports.createReport = async (req, res) => {
     const { kullanici_id, baslik, aciklama, ihbar_turu, kategori, hayvan_turu, enlem, boylam, bolge_id, hayvan_id, foto_id, adres } = req.body;
 
@@ -87,7 +87,13 @@ exports.createReport = async (req, res) => {
         return res.status(400).json({ success: false, error: 'Lütfen zorunlu alanları doldurun.' });
     }
 
+    // Get a client from the pool for transaction
+    const client = await db.getClient();
+    
     try {
+        // BEGIN TRANSACTION
+        await client.query('BEGIN');
+        
         // İhbar türü mapping (Eski sistem uyumluluğu için)
         // Eğer kategori gelmezse, ihbar_turu'nu kategori olarak kullan veya REPORT yap
         const finalKategori = kategori || 'REPORT';
@@ -114,10 +120,15 @@ exports.createReport = async (req, res) => {
             adres || ''
         ];
         
-        const result = await db.query(query, values);
+        const result = await client.query(query, values);
 
-        // Kullanıcıya puan ekle (Gamification)
-        await db.query('UPDATE kullanicilar SET puan = puan + 10 WHERE kullanici_id = $1', [kullanici_id]);
+        // Kullanıcıya puan ekle (Gamification) - Aynı transaction içinde
+        await client.query('UPDATE kullanicilar SET puan = puan + 10 WHERE kullanici_id = $1', [kullanici_id]);
+
+        // COMMIT TRANSACTION - Tüm değişiklikleri kalıcı yap
+        await client.query('COMMIT');
+        
+        console.log(`✓ Gönderi başarıyla oluşturuldu: ID ${result.rows[0].ihbar_id}`);
 
         res.status(201).json({
             success: true,
@@ -125,7 +136,13 @@ exports.createReport = async (req, res) => {
             message: 'Gönderi başarıyla oluşturuldu.'
         });
     } catch (error) {
+        // ROLLBACK on error
+        await client.query('ROLLBACK');
+        console.error('✗ Gönderi oluşturma hatası:', error.message);
         res.status(500).json({ success: false, error: error.message });
+    } finally {
+        // Release client back to pool
+        client.release();
     }
 };
 

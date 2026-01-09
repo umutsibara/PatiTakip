@@ -36,8 +36,7 @@ exports.register = async (req, res) => {
         res.status(201).json({
             success: true,
             message: 'Kullanıcı başarıyla oluşturuldu.',
-            token: token,
-            user: {
+            data: {
                 kullanici_id: user.kullanici_id,
                 kullanici_adi: user.kullanici_adi,
                 eposta: eposta,
@@ -47,7 +46,8 @@ exports.register = async (req, res) => {
                 rutbe: user.rutbe,
                 toplam_ihbar_sayisi: 0,
                 toplam_besleme_sayisi: 0,
-                toplam_yorum_sayisi: 0
+                toplam_yorum_sayisi: 0,
+                token: token
             }
         });
     } catch (error) {
@@ -93,8 +93,7 @@ exports.login = async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'Giriş başarılı.',
-            token: token,
-            user: {
+            data: {
                 kullanici_id: user.kullanici_id,
                 kullanici_adi: user.kullanici_adi,
                 eposta: user.eposta,
@@ -104,7 +103,8 @@ exports.login = async (req, res) => {
                 rutbe: user.rutbe,
                 toplam_ihbar_sayisi: user.toplam_ihbar_sayisi,
                 toplam_besleme_sayisi: user.toplam_besleme_sayisi,
-                toplam_yorum_sayisi: user.toplam_yorum_sayisi
+                toplam_yorum_sayisi: user.toplam_yorum_sayisi,
+                token: token
             }
         });
     } catch (error) {

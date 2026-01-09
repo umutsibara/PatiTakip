@@ -34,12 +34,14 @@ const serviceRoutes = require('./routes/serviceRoutes');
 const commentRoutes = require('./routes/commentRoutes');
 const likeRoutes = require('./routes/likeRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const testDbRoutes = require('./routes/testDbRoutes');
 
 // Statik Dosyalar
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // API Endpoints
 console.log('🔗 Registering API endpoints...');
+app.use('/api/test-db', testDbRoutes); // Test endpoint - Must be first
 app.use('/api/reports', reportRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api', extraRoutes);
