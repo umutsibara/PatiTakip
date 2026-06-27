@@ -1,0 +1,11 @@
+# Environment
+backend/.env
+
+# Dependencies
+backend/node_modules/
+
+# IDE
+**/.idea/
+*.iml
+
+
